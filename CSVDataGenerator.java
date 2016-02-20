@@ -43,7 +43,24 @@ public class CSVDataGenerator {
 		return courseSet;
 	}
 	
-	
+	public static Set<Student> buildDupStudents() throws IOException {
+		
+		Set<Student> studentSet = new HashSet<Student>();
+
+		for (int i = 0; i < 5; i++) {
+			Student student = new Student(i);
+			student.set_name("Student Name " + i);
+			student.set_courseID(i * 3);
+			student.set_active(i % 2 == 0);
+			studentSet.add( student );
+		}
+		
+		List<String[]> records = toStringArrayStudents(studentSet, true);
+		records.addAll(toStringArrayStudents(studentSet, false));
+
+		writeCSV("./bin/instructure/inputfiles/students.csv", records );	
+		return studentSet;
+	}
 	
 	
 	private static void writeCSV(String fileName, List<String[]> data) throws IOException{
