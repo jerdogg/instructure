@@ -4,14 +4,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import com.opencsv.CSVWriter;
-
-import instructure.Course;
 import instructure.Student;
 
 public class StudentGenerator {
@@ -42,7 +38,7 @@ public class StudentGenerator {
 		
 		Map<Integer, Student> studentSet = StudentGenerator.StudentBuilder();
 		
-		writeCSV(studentsFileName,  toStringArrayStudents(studentSet, true, false) );	
+		writeCSV(studentsFileName,  toStringArrayStudents(studentSet, true) );	
 		return studentSet;
 	}
 
@@ -50,8 +46,8 @@ public class StudentGenerator {
 		
 		Map<Integer, Student> studentSet = StudentGenerator.StudentBuilder();
 				
-		List<String[]> records = toStringArrayStudents(studentSet, true, false);
-		records.addAll(toStringArrayStudents(studentSet, false, false));
+		List<String[]> records = toStringArrayStudents(studentSet, true);
+		records.addAll(toStringArrayStudents(studentSet, false));
 
 		writeCSV(studentsFileName, records );	
 		return studentSet;
@@ -81,23 +77,11 @@ public class StudentGenerator {
 		csvWriter.close();	
 	}
 
-	private static List<String[]> toStringArrayStudents(Map<Integer, Student> studentSet, boolean withHeader, boolean missOrderHeader) {
-
-		List<Student> list = new ArrayList<Student>(studentSet.values());
+	private static List<String[]> toStringArrayStudents(Map<Integer, Student> studentSet, boolean withHeader) {
 		
 		List<String[]> records = new ArrayList<String[]>();
 		
 		if (withHeader) {
-			if ( missOrderHeader ) {
-				//Header Miss order
-				records.add(new String[] { "user_name", "user_id", "state", "course_id" });
-				for (Student stud : studentSet.values() ) {
-					records.add(new String[] { 	stud.get_name(),
-												String.valueOf(stud.get_studentId()),
-												String.valueOf(stud.is_active()),
-												String.valueOf(stud.get_courseID()) });
-				}
-			} else {
 				//Normal construction
 				records.add(new String[] { "user_id", "user_name", "course_id", "state" });
 				for (Student stud : studentSet.values() ) {
@@ -106,7 +90,6 @@ public class StudentGenerator {
 												String.valueOf(stud.get_courseID()), 
 												String.valueOf(stud.is_active()) });
 				}
-			}
 		} else {
 			//No header option - used for Dups
 			for (Student stud : studentSet.values() ) {
