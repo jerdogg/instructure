@@ -10,15 +10,15 @@ public class DataStructure {
 	private Map<Integer, Student> StudentEnrollment = new HashMap<Integer, Student>();	
 	private Map<Integer, Course> Courses = new HashMap<Integer, Course>();
 	
-	public DataStructure(Set<Course> courses){		
-		for( Course Clas : courses){
+	public DataStructure(Map<Integer, Course> courses){		
+		for( Course Clas : courses.values() ){
 			Courses.put(Clas.get_courseID(), Clas );
 		}
 	}
 	
-	public void addAll(Set<Student> students){
+	public void addAll(Map<Integer, Student> students){
 		
-		for ( Student stud : students )
+		for ( Student stud : students.values() )
 			this.add(stud);	
 	}
 	
