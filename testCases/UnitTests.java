@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.Set;
 import org.junit.Test;
-import instructure.CSVDataGenerator;
+
 import instructure.CSVParser;
 import instructure.Course;
 import instructure.Student;
@@ -41,7 +41,7 @@ public class UnitTests {
 	public void GenParseCoursesTest(){
 		try {
 			Set<Course> Input = CSVDataGenerator.buildValidCourses();
-			Set<Course> Output = CSVParser.parseClasses();
+			Set<Course> Output = CSVParser.parseCourses();
 				
 			assertEquals("not equal", Input, Output);
 					

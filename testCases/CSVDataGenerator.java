@@ -1,45 +1,66 @@
-package instructure;
+package instructure.testCases;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
-
 import com.opencsv.CSVWriter;
+
+import instructure.Course;
+import instructure.Student;
 
 public class CSVDataGenerator {
 
+	private static final String[] LASTNAMES = {"anderson", "johnson", "wheeler", "richards", "money", "smith"};
+	private static final String[] FIRSTNAMES = {"Bill", "Ted", "Mr.", "BillyBob", "JoBob", "Steve"};
+	private static final String[] COURSENAMES = {"Math", "English", "Science", "Biology"};
+	
+	
+	public static final String studentsFileName = "../../Repro/instructure/inputFiles/students.csv";
+	public static final String coursesFileName = "../../Repro/instructure/inputFiles/courses.csv";
+	private static final int NUMBER_OF_RECORDS = 10;
+	
 	public static Set<Student> buildValidStudents() throws IOException {
 
 		Set<Student> studentSet = new HashSet<Student>();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < NUMBER_OF_RECORDS; i++) {
 			Student student = new Student(i);
-			student.set_name("Student Name " + i);
+			student.set_name(CSVDataGenerator.randomName(FIRSTNAMES, LASTNAMES));
 			student.set_courseID(i * 3);
 			student.set_active(i % 2 == 0);
 			studentSet.add( student );
 		}
 
-		writeCSV("./bin/instructure/inputfiles/students.csv",  toStringArrayStudents(studentSet, true) );	
+		writeCSV(studentsFileName,  toStringArrayStudents(studentSet, true) );	
 		return studentSet;
 	}
 	
+	private static String randomName(String[] firstname, String[] lastname){
+		return CSVDataGenerator.random(FIRSTNAMES)+" "+CSVDataGenerator.random(LASTNAMES);		
+	}
+	
+	private static String random(String[] input) {
+		int index = new Random().nextInt(input.length);
+		String name = input[index];
+		return name;
+	}
 
 	public static Set<Course> buildValidCourses() throws IOException{
 		
 		Set<Course> courseSet = new HashSet<Course>();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < NUMBER_OF_RECORDS; i++) {
 			Course course = new Course(i);
-			course.set_courseName("Course Name "+i);
+			course.set_courseName(CSVDataGenerator.random(COURSENAMES)+" "+i);
 			course.set_state(i%2==0);
 			courseSet.add(course);
 		}
 
-		writeCSV("./bin/instructure/inputfiles/classes.csv", toStringArrayCourse(courseSet, true) );	
+		writeCSV(coursesFileName, toStringArrayCourse(courseSet, true) );	
 		return courseSet;
 	}
 	
@@ -47,9 +68,9 @@ public class CSVDataGenerator {
 		
 		Set<Student> studentSet = new HashSet<Student>();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < NUMBER_OF_RECORDS; i++) {
 			Student student = new Student(i);
-			student.set_name("Student Name " + i);
+			student.set_name(CSVDataGenerator.randomName(FIRSTNAMES, LASTNAMES));
 			student.set_courseID(i * 3);
 			student.set_active(i % 2 == 0);
 			studentSet.add( student );
@@ -58,7 +79,7 @@ public class CSVDataGenerator {
 		List<String[]> records = toStringArrayStudents(studentSet, true);
 		records.addAll(toStringArrayStudents(studentSet, false));
 
-		writeCSV("./bin/instructure/inputfiles/students.csv", records );	
+		writeCSV(studentsFileName, records );	
 		return studentSet;
 	}
 	

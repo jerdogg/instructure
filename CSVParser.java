@@ -6,12 +6,16 @@ import java.util.HashSet;
 import java.util.Set;
 import com.opencsv.CSVReader;
 
+import instructure.testCases.CSVDataGenerator;
+
 
 public class CSVParser {
 
+	
+	
 	public static Set<Student> parseStudents() throws IOException {
-
-		CSVReader reader = new CSVReader(new FileReader("./bin/instructure/inputfiles/students.csv"), ',');
+		
+		CSVReader reader = new CSVReader(new FileReader(CSVDataGenerator.studentsFileName), ',');
 		Set<Student> StudentSet = new HashSet<Student>();
 		String[] record = null;
 		// Ignore header
@@ -28,9 +32,9 @@ public class CSVParser {
 		return StudentSet;
 	}
 	
-	public static Set<Course> parseClasses() throws IOException {
+	public static Set<Course> parseCourses() throws IOException {
 
-		CSVReader reader = new CSVReader(new FileReader("./bin/instructure/inputfiles/classes.csv"), ',');
+		CSVReader reader = new CSVReader(new FileReader(CSVDataGenerator.coursesFileName), ',');
 		Set<Course> ClassSet = new HashSet<Course>();
 		String[] record = null;
 		// Ignore header

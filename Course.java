@@ -56,15 +56,23 @@ public final class Course {
         }
 
         Course course = (Course) obj;
-        return 	this.get_courseID() == course.get_courseID() &&        		
-        		Objects.equals(this.get_courseName(), course.get_courseName() ) &&        		
-        		this.is_state() == course.is_state();
+        return this.get_courseID() == course.get_courseID();
+        
+//        return 	this.get_courseID() == course.get_courseID() &&        		
+//        		Objects.equals(this.get_courseName(), course.get_courseName() ) &&        		
+//        		this.is_state() == course.is_state();
 	}
 	
 	public void print(){
+		String temp = null;
+		if ( this.is_state() == false )
+			temp = "deleted";
+		else
+			temp = "active";
+		
 		System.out.println(	this.get_courseID()+" - "+
 							this.get_courseName()+" : "+
-							this.is_state());
+							temp );
 	}
 	
 }

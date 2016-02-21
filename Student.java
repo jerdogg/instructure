@@ -59,10 +59,16 @@ public final class Student {
 	}  
 	
 	public void print(){
+		String temp = null;
+		if ( this.is_active() == false )
+			temp = "deleted";
+		else
+			temp = "active";
+		
 		System.out.println(	this.get_studentId()+" "+
 						  	this.get_name()+" "+
 							this.get_courseID()+" "+
-						  	this.is_active() );
+							temp );
 	}
 	
 	@Override
