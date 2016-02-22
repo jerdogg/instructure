@@ -5,8 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import com.opencsv.CSVReader;
-import instructure.testCases.CourseGenerator;
-import instructure.testCases.StudentGenerator;
+
+import instructure.testCases.generators.CourseGenerator;
+import instructure.testCases.generators.StudentGenerator;
 
 
 public class CSVParser {
@@ -15,7 +16,7 @@ public class CSVParser {
 	public static Map<Integer, Student> parseStudents() throws Exception {
 		
 		//throws IOexceptin if file not found.
-		CSVReader reader = new CSVReader(new FileReader(StudentGenerator.studentsFileName), ',');
+		CSVReader reader = new CSVReader(new FileReader(StudentGenerator.STUDENTS_FILE_NAME), ',');
 		Map<Integer, Student> StudentMap = new HashMap<Integer, Student>();
 		String[] record = null;		
 		
@@ -49,7 +50,7 @@ public class CSVParser {
 		//Read records and Map accordingly to student object
 		//Can throw int parsing error if string isn't a int.
 		while ((record = reader.readNext()) != null) {	
-			
+					
 			//Checks for:
 			//empty string in record
 			//Just spaces in record
@@ -65,7 +66,7 @@ public class CSVParser {
 			Student stud = new Student(Integer.valueOf(record[mapping.get("user_id")]));				
 			stud.set_name(record[mapping.get("user_name")]);				
 			stud.set_courseID(Integer.valueOf(record[mapping.get("course_id")]));
-			stud.set_active(Boolean.parseBoolean(record[mapping.get("state")]));				
+			stud.set_active(Boolean.parseBoolean(record[mapping.get("state")]));		
 			StudentMap.put(stud.get_studentId(), stud );			
 		}
 		
@@ -76,7 +77,7 @@ public class CSVParser {
 	public static Map<Integer, Course> parseCourses() throws Exception {
 
 		//Throws IOException if file not found
-		CSVReader reader = new CSVReader(new FileReader(CourseGenerator.coursesFileName), ',');
+		CSVReader reader = new CSVReader(new FileReader(CourseGenerator.COURSE_FILE_NAME), ',');
 		Map<Integer, Course> CourseMap = new HashMap<Integer, Course>();
 		String[] record = null;		
 		

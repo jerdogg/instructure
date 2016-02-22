@@ -1,4 +1,4 @@
-package instructure.testCases;
+package instructure.testCases.generators;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import instructure.Course;
 public class CourseGenerator {
 
 	private static final String[] COURSENAMES = { "Math", "English", "Science", "Biology" };
-	public static final String coursesFileName = "../../Repro/instructure/inputFiles/courses.csv";
+	public static final String COURSE_FILE_NAME = "../../Repro/instructure/inputFiles/courses.csv";
 
 	public static final int NUMBER_OF_RECORDS = 10;
 
@@ -23,7 +23,7 @@ public class CourseGenerator {
 
 		for (int i = 0; i < NUMBER_OF_RECORDS; i++) {
 			Course course = new Course(i);
-			course.set_courseName(CourseGenerator.random(COURSENAMES) + " " + i);
+			course.set_courseName(CourseGenerator.random(COURSENAMES) + " " + new Random().nextInt( CourseGenerator.NUMBER_OF_RECORDS ));
 			course.set_state(i % 2 == 0);
 			courseSet.put(course.get_courseID(), course);
 		}
@@ -35,7 +35,15 @@ public class CourseGenerator {
 		
 		Map<Integer, Course> courseSet = CourseGenerator.CourseBuilder();
 		
-		writeCSV(coursesFileName,  toStringArrayCourse(courseSet, true) );	
+		writeCSV(COURSE_FILE_NAME,  toStringArrayCourse(courseSet, true) );	
+		return courseSet;
+	}	
+	
+	public static Map<Integer, Course> buildNoCourseHeader() throws IOException {
+		
+		Map<Integer, Course> courseSet = CourseGenerator.CourseBuilder();
+		
+		writeCSV(COURSE_FILE_NAME,  toStringArrayCourse(courseSet, false) );	
 		return courseSet;
 	}	
 	
@@ -46,10 +54,35 @@ public class CourseGenerator {
 		List<String[]> records = toStringArrayCourse(courseSet, true);
 		records.addAll(toStringArrayCourse(courseSet, false));
 
-		writeCSV(coursesFileName, records );	
+		writeCSV(COURSE_FILE_NAME, records );	
 		return courseSet;
 	}
 	
+public static Map<Integer, Course> buildUpdateCourses() throws IOException {
+		
+		Map<Integer, Course> courseSet = CourseGenerator.CourseBuilder();		
+		
+		List<String[]> records = new ArrayList<String[]>();
+		records.add(new String[] { "course_id", "course_name", "state" });
+
+	
+		for (Course clas : courseSet.values()) {
+			records.add(new String[] { 	String.valueOf(clas.get_courseID()), 
+										clas.get_courseName(),
+										String.valueOf(clas.is_state()) });
+		}
+				
+		courseSet = CourseGenerator.CourseBuilder();
+		for (Course clas : courseSet.values() ) {		
+			records.add(new String[] { 	String.valueOf(clas.get_courseID()), 
+										clas.get_courseName(),
+										String.valueOf(clas.is_state()) });
+		}
+		
+		writeCSV(COURSE_FILE_NAME, records );	
+		return courseSet;
+	}
+
 	public static Map<Integer, Course> BuildCourseColumnOrder() throws IOException {
 		
 		Map<Integer, Course> courseSet = CourseGenerator.CourseBuilder();		
@@ -62,7 +95,7 @@ public class CourseGenerator {
 					String.valueOf(clas.is_state()),
 					String.valueOf(clas.get_courseID()) });
 		}
-		writeCSV(coursesFileName, records );	
+		writeCSV(COURSE_FILE_NAME, records );	
 		return courseSet;
 	}
 		
