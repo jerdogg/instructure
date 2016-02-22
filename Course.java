@@ -3,8 +3,11 @@ package instructure;
 import java.util.Objects;
 
 //****************************************************
-//Assumption:  ID can not change, but all other fields can.
-//ID is keep immutable for use as key in hashmap
+//courseID is require to create instance of object and 
+//can not change throughout the life of the object.
+//
+//Course object is not used as key in hash, but
+//Override hashcode and equals anyways for future usage
 //****************************************************
 public final class Course {
 
@@ -55,12 +58,10 @@ public final class Course {
             return false;
         }
 
-        Course course = (Course) obj;
-        return this.get_courseID() == course.get_courseID();
-        
-//        return 	this.get_courseID() == course.get_courseID() &&        		
-//        		Objects.equals(this.get_courseName(), course.get_courseName() ) &&        		
-//        		this.is_state() == course.is_state();
+        Course course = (Course) obj;      
+        return 	this.get_courseID() == course.get_courseID() &&        		
+        		Objects.equals(this.get_courseName(), course.get_courseName() ) &&        		
+        		this.is_state() == course.is_state();
 	}
 	
 	public void print(){

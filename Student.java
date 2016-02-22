@@ -2,20 +2,30 @@ package instructure;
 
 import java.util.Objects;
 
-// ****************************************************
-// Assumption:  ID can not change, but all other fields can.
-// ID is keep immutable for use as key in hashmap
-// ****************************************************
-
-/*
- * 
- */
+//****************************************************
+//StudentID is require to create instance of object and 
+//can not change throughout the life of the object.
+//
+//Student object is not used as key in hash, but
+//Override hashcode and equals anyways for future usage
+//****************************************************
 public final class Student {
 
 	private final int _studentId;
 	private String _name;
 	private int _courseID;
 	private boolean _active = false;
+	
+	public Student(int StudentID){
+		this._studentId = StudentID;
+	} 
+	
+	public Student(int StudentID, String name, int courseID, boolean state){
+		this._studentId = StudentID;
+		this._name = name;
+		this._courseID = courseID;
+		this._active = state;		
+	}
 	
 	public String get_name() {
 		return _name;
@@ -48,15 +58,7 @@ public final class Student {
 	public void set_active(boolean _active) {
 		this._active = _active;
 	}
-	
-	public Student(int StudentID){
-		this._studentId = StudentID;
-	} 
-	
-	public Student(int StudentID, String name, int courseID, boolean state){
-		this._studentId = StudentID;
-		
-	}  
+	  
 	
 	public void print(){
 		String temp = null;

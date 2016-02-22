@@ -15,7 +15,7 @@ public class CourseGenerator {
 	private static final String[] COURSENAMES = { "Math", "English", "Science", "Biology" };
 	public static final String coursesFileName = "../../Repro/instructure/inputFiles/courses.csv";
 
-	private static final int NUMBER_OF_RECORDS = 10;
+	public static final int NUMBER_OF_RECORDS = 10;
 
 	private static Map<Integer, Course> CourseBuilder() {
 

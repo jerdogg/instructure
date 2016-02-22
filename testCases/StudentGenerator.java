@@ -15,18 +15,17 @@ public class StudentGenerator {
 	private static final String[] LASTNAMES = {"anderson", "johnson", "wheeler", "richards", "money", "smith"};
 	private static final String[] FIRSTNAMES = {"Bill", "Ted", "Mr.", "BillyBob", "JoBob", "Steve"};
 	
-	public static final String studentsFileName = "../../Repro/instructure/inputFiles/students.csv";
+	public static final String studentsFileName = "../../Repro/instructure/inputFiles/students.csv";	
+	public static final int NUMBER_OF_RECORDS = 30;
 	
-	private static final int NUMBER_OF_RECORDS = 10;
-	
-	private static Map<Integer, Student> StudentBuilder() throws IOException {
+	private static Map<Integer, Student> StudentBuilder() {
 
 		Map<Integer, Student> studentSet = new HashMap<Integer, Student>();
 
 		for (int i = 0; i < NUMBER_OF_RECORDS; i++) {
 			Student student = new Student(i);
 			student.set_name(StudentGenerator.randomName(FIRSTNAMES, LASTNAMES));
-			student.set_courseID(i * 2);
+			student.set_courseID(new Random().nextInt( CourseGenerator.NUMBER_OF_RECORDS + 5 ) );
 			student.set_active(i % 2 == 0);
 			studentSet.put(student.get_studentId(), student );
 		}
@@ -48,6 +47,19 @@ public class StudentGenerator {
 				
 		List<String[]> records = toStringArrayStudents(studentSet, true);
 		records.addAll(toStringArrayStudents(studentSet, false));
+
+		writeCSV(studentsFileName, records );	
+		return studentSet;
+	}
+	
+	public static Map<Integer, Student> buildEmptyTextField() throws IOException {
+		
+		Map<Integer, Student> studentSet = StudentGenerator.StudentBuilder();
+				
+		Student InvalidStudent = studentSet.get( new Random().nextInt( studentSet.size() ) );
+		InvalidStudent.set_name("");
+		
+		List<String[]> records = toStringArrayStudents(studentSet, true);
 
 		writeCSV(studentsFileName, records );	
 		return studentSet;

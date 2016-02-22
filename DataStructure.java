@@ -24,15 +24,32 @@ public class DataStructure {
 	
 	public void add(Student student){
 		
-		if ( Courses.containsKey(student.get_courseID()) )
-			StudentEnrollment.put(student.get_studentId(), student);
-		else {
+		StudentEnrollment.put(student.get_studentId(), student);
+		
+		if ( !Courses.containsKey(student.get_courseID()) ) {
 			System.err.println("Invalid course for Student:");
 			System.err.println("  CourseID: "+student.get_courseID());
 			System.err.println("  Student: "+student.get_studentId()+": "+student.get_name());
+			System.err.println();
 		}	
 	}
 	
+	public void printSudents(){
+	    System.out.println("Students:");
+		for ( Student student : StudentEnrollment.values() ) {
+			System.out.print(" "); student.print();	
+		}
+		System.out.println();
+	}
+	
+	public void printCourses(){
+		System.out.println("Courses:");
+		for ( Course course : Courses.values() ) {
+			System.out.print(" ");
+			course.print();
+		}
+		System.out.println();
+	}
 	
 	public void print(){
 		

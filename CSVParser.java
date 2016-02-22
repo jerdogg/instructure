@@ -1,22 +1,20 @@
 package instructure;
 
 import java.io.FileReader;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import com.opencsv.CSVReader;
 import instructure.testCases.CourseGenerator;
 import instructure.testCases.StudentGenerator;
 
 
 public class CSVParser {
-
 	
 	
-	public static Map<Integer, Student> parseStudents() throws IOException {
+	public static Map<Integer, Student> parseStudents() throws Exception {
 		
+		//throws IOexceptin if file not found.
 		CSVReader reader = new CSVReader(new FileReader(StudentGenerator.studentsFileName), ',');
 		Map<Integer, Student> StudentMap = new HashMap<Integer, Student>();
 		String[] record = null;		
@@ -25,10 +23,9 @@ public class CSVParser {
 		String[] Header = reader.readNext();
 		
 		//Check Header Length
-		if ( Header.length > 4 ) {
-			System.err.println("[Student Parsing err]: Unexpected Number of Columns Student CVS file");
+		if ( Header.length > 4 ) {	
 			reader.close();
-			return null;
+			throw new Exception("[Student Header Size Err]: Unexpected Number of Columns in Student CVS file");
 		}		
 		
 		//Map column name to column order
@@ -43,19 +40,32 @@ public class CSVParser {
 				case "course_id": mapping.put("course_id", i); break;
 				case "state": mapping.put("state", i); break;
 				default: {
-					System.err.println("[Student Parsing err]: Unexpected Column Name "+Header[i]);
 					reader.close();
-					return null;
+					throw new Exception("[Student Header Not Found Err]: Unknown Column Name "+Header[i]);
 				}					
 			}
 		}
 
 		//Read records and Map accordingly to student object
+		//Can throw int parsing error if string isn't a int.
 		while ((record = reader.readNext()) != null) {	
-			Student stud = new Student(Integer.valueOf(record[mapping.get("user_id")]));
-			stud.set_name(record[mapping.get("user_name")]);
+			
+			//Checks for:
+			//empty string in record
+			//Just spaces in record
+			//A number for a Name is valid.  
+			//any text for state other than true is considered false.
+			for (String text : record) {				
+				if ( text == null || text.trim().isEmpty() ) {
+					reader.close();
+					throw new Exception("[Student Field Parsing Err]: Null text for student: "+Arrays.toString(record));
+				}					
+			}
+			
+			Student stud = new Student(Integer.valueOf(record[mapping.get("user_id")]));				
+			stud.set_name(record[mapping.get("user_name")]);				
 			stud.set_courseID(Integer.valueOf(record[mapping.get("course_id")]));
-			stud.set_active(Boolean.parseBoolean(record[mapping.get("state")]));
+			stud.set_active(Boolean.parseBoolean(record[mapping.get("state")]));				
 			StudentMap.put(stud.get_studentId(), stud );			
 		}
 		
@@ -63,8 +73,9 @@ public class CSVParser {
 		return StudentMap;
 	}
 	
-	public static Map<Integer, Course> parseCourses() throws IOException {
+	public static Map<Integer, Course> parseCourses() throws Exception {
 
+		//Throws IOException if file not found
 		CSVReader reader = new CSVReader(new FileReader(CourseGenerator.coursesFileName), ',');
 		Map<Integer, Course> CourseMap = new HashMap<Integer, Course>();
 		String[] record = null;		
@@ -74,9 +85,8 @@ public class CSVParser {
 		
 		//Check Header Length
 		if ( Header.length > 3 ) {
-			System.err.println("[Courses Parsing err]: Unexpected Number of Columns Courses CVS file");
 			reader.close();
-			return null;
+			throw new Exception("[Course Header Size Err]: Unexpected Number of Columns in Student CVS file");
 		}		
 		
 		//Map column name to column order
@@ -90,15 +100,28 @@ public class CSVParser {
 				case "course_name": mapping.put("course_name", i); break;
 				case "state": mapping.put("state", i); break;
 				default: {
-					System.err.println("[Courses Parsing err]: Unexpected Column Name: "+Header[i]);
 					reader.close();
-					return null;
+					throw new Exception("[Course Header Not Found Err]: Unknown Column Name "+Header[i]);
 				}					
 			}
 		}
 
 		//Read records and Map accordingly to student object
+		//Can throw int parsing error if string isn't a int.
 		while ((record = reader.readNext()) != null) {
+			
+			//Checks for:
+			//empty string in record
+			//Just spaces in record
+			//A number for a Name is valid.  
+			//any text for state other than true is considered false.
+			for (String text : record) {				
+				if ( text == null || text.trim().isEmpty() ) {
+					reader.close();
+					throw new Exception("[Course Field Parsing Err]: Null text for Course: "+Arrays.toString(record));
+				}					
+			}
+			
 			Course course = new Course(Integer.valueOf(record[mapping.get("course_id")]));
 			course.set_courseName(record[mapping.get("course_name")]);
 			course.set_state(Boolean.parseBoolean(record[mapping.get("state")]));
@@ -107,4 +130,5 @@ public class CSVParser {
 		reader.close();
 		return CourseMap;
 	}
+
 }
